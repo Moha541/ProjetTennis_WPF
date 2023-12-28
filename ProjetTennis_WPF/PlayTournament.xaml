@@ -1,0 +1,49 @@
+﻿<Window x:Class="ProjetTennis_WPF.PlayTournament"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ProjetTennis_WPF"
+        mc:Ignorable="d"
+        Title="PlayTournament" Height="500" Width="800"
+        WindowState="Maximized">
+    <Grid>
+
+
+
+        <ListView Name="ParticipantsList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Match" Width="50" DisplayMemberBinding="{Binding Id_Match}" />
+                    <GridViewColumn Header="Opponent 1" Width="200">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <MultiBinding StringFormat="{}{0} {1}">
+                                <Binding Path="Opponent1.Player1.Firstname" />
+                                <Binding Path="Opponent1.Player1.Lastname" />
+                            </MultiBinding>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Score 1" Width="50" DisplayMemberBinding="{Binding ScoreOp1}" />
+                    <GridViewColumn Header="Score 2" Width="50" DisplayMemberBinding="{Binding ScoreOp2}" />
+                    <GridViewColumn Header="Opponent 2" Width="200">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <MultiBinding StringFormat="{}{0} {1}">
+                                <Binding Path="Opponent2.Player1.Firstname" />
+                                <Binding Path="Opponent2.Player1.Lastname" />
+                            </MultiBinding>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBlock x:Name="idTxt" HorizontalAlignment="Left" Margin="65,139,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <Button x:Name="IdTxtButton" Content="Play Next Round" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Click="PlayNextRound" Visibility="Visible" />
+      
+        <TextBlock x:Name="WinnerTextBlock" HorizontalAlignment="Center" Margin="0,73,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Collapsed"/>
+
+
+    </Grid>
+
+</Window>
+
+
