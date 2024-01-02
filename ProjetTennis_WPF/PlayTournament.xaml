@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="PlayTournament" Height="500" Width="800"
         WindowState="Maximized">
-    <Grid>
+    <Grid Background="#FF26B83C">
 
 
 
-        <ListView Name="ParticipantsList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+        <ListView Name="ParticipantsList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Foreground="#FF711704" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Match" Width="50" DisplayMemberBinding="{Binding Id_Match}" />
@@ -37,13 +37,12 @@
             </ListView.View>
         </ListView>
         <TextBlock x:Name="idTxt" HorizontalAlignment="Left" Margin="65,139,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <Button x:Name="IdTxtButton" Content="Play Next Round" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Click="PlayNextRound" Visibility="Visible" />
-      
+        <Button x:Name="IdTxtButton" Content="Play Next Round" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Click="PlayNextRound" Visibility="Visible" Background="#FF8BCC52" />
+
         <TextBlock x:Name="WinnerTextBlock" HorizontalAlignment="Center" Margin="0,73,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Collapsed"/>
+        <Button x:Name="HomeBtn" Content="Home page" HorizontalAlignment="Center" Margin="0,117,0,0" VerticalAlignment="Top" Height="30" Width="92" Visibility="Hidden" Click="HomeBtn_Click" Background="#FF8BCC52"/>
 
 
     </Grid>
 
 </Window>
-
-

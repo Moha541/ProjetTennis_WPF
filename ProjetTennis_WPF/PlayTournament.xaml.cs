@@ -22,45 +22,32 @@ namespace ProjetTennis_WPF
     public partial class PlayTournament : Window
     {
 
-        public Schedule.ScheduleType TournamentType { get; set; }
         public ObservableCollection<Match> Matches { get; set; }
 
         private Schedule schedule;
 
-        public PlayTournament(Schedule.ScheduleType tournamentType1)
+        public PlayTournament(Schedule schedule1)
         {
             InitializeComponent();
-            TournamentType = tournamentType1; // On utilise la propriété de classe au lieu de déclarer une nouvelle variable locale
+            schedule = schedule1; // On utilise la propriété de classe au lieu de déclarer une nouvelle variable locale
             InitializeParticipants();
             this.DataContext = this; // Définir le contexte de données
+            Closing += MainWindow_Closing;
         }
 
-        //private void InitializeParticipants()
-        //{
-        //    Matches = new ObservableCollection<Match>();
-        //    Schedule schedule = new Schedule();
-        //    schedule.CreateMatch(TournamentType);
-        //    List<Match> matches = schedule.Matches;
-        //    for (int i = 0; i < matches.Count(); i++)
-        //    {
-        //        Matches.Add(matches[i]);
-        //    }
-        //    ParticipantsList.ItemsSource = Matches;
-
-        //}
-
-
-
-
-        //------------------------------------------TEST---------------------------------------------------------------//
+     private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+       
+        Application.Current.Shutdown();//Stop le programme quand on appuie sur le X 
+    }
 
         private void InitializeParticipants()
         {
             Matches = new ObservableCollection<Match>();
 
             // Utilisez la variable de classe au lieu d'en déclarer une nouvelle
-            schedule = new Schedule();
-            schedule.Play(TournamentType);
+            
+            schedule.Play(schedule);
             List<Match> matches = schedule.Matches;
 
             for (int i = 0; i < matches.Count(); i++)
@@ -72,13 +59,14 @@ namespace ProjetTennis_WPF
 
         public void PlayNextRound(object sender, RoutedEventArgs e)
         {
-            schedule.Play(TournamentType); 
+            schedule.Play(schedule); 
             UpdateMatchesList();
 
             if (schedule.ActualRound == 6)
             {
                 ShowWinner();
                 IdTxtButton.Visibility = Visibility.Hidden;
+                HomeBtn.Visibility = Visibility.Visible;
             }
         }
 
@@ -104,8 +92,12 @@ namespace ProjetTennis_WPF
             }
         }
 
-
-
+        private void HomeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Hide();
+        }
     }
 }
 

@@ -16,7 +16,7 @@ namespace ProjetTennis.Models
         {
             return IsAvailable;
         }
-        public static List<Referee> GetReferees()
+        public static Queue<Referee> GetReferees()
         {
             RefereeDAO refereeDAO = new RefereeDAO();
             return refereeDAO.GetReferees();
@@ -33,4 +33,7 @@ namespace ProjetTennis.Models
             refereeDAO.Update(this);
         }
     }
+
 }
+
+

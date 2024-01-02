@@ -16,7 +16,7 @@ namespace ProjetTennis.DAO
         private string connectionString;
         public CourtDAO()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["TennisProjet"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["Tonda_Mansour_Project"].ConnectionString;
         }
         public List<Court> GetCourts()
         {
@@ -36,10 +36,6 @@ namespace ProjetTennis.DAO
                         Court.Covered = reader.GetBoolean("covered");
                         Court.Tournament.Id_Tournament = reader.GetInt32("Id_Tournament");
                         Court.IsAvailable = reader.GetBoolean("Available");
-
-                        // Initialize Tournament before setting its property
-                        Court.Tournament.Id_Tournament = reader.GetInt32("Id_Tournament");
-
                         Courts.Add(Court);
                     }
                 }

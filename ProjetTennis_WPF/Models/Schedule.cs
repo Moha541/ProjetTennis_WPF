@@ -2,6 +2,7 @@
 using ProjetTennis.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,21 @@ namespace ProjetTennis.Models
         public Tournament Tournament { get; set; }
         public List<Match> Matches { get; set; }
         List<Opponent> winners = new List<Opponent>();
-    
 
-        public void Play(Schedule.ScheduleType TypeChoice)
+        
+        public void Play(Schedule schedule)
         {
+            this.Tournament = schedule.Tournament;
+            this.Type = schedule.Type;
+            this.ActualRound = schedule.ActualRound;
+            ScheduleDAO scheduleDAO = new ScheduleDAO();
+            scheduleDAO.InsertSchedule(this);
+            this.Id_Schedule = scheduleDAO.GetScheduleId(this);
+
             if (ActualRound < 6)  // On ne dépasse pas les 6 rounds 
             {
-                
-                PlayNextRound(TypeChoice);
+
+                PlayNextRoundAsync();
                 Console.WriteLine(Matches.Count);
 
                 winners = GetWinners();
@@ -36,16 +44,17 @@ namespace ProjetTennis.Models
                 {
                     Console.WriteLine("Tournoi terminé. Vainqueur : " + winners[0].Player1.Lastname);
                 }
-            }
 
+            }
         }
 
 
-         public void CreateMatch(Schedule.ScheduleType Type)
+         public void CreateMatch()
         {
+            MatchDAO matchDAO = new MatchDAO();
             Matches = new List<Match>();
             PlayerDAO playerDAO = new PlayerDAO();
-           
+            OpponentDAO opponentDAO = new OpponentDAO();
             List<Player> players = null;
             // Affichage de la valeur de l'énumération
             Console.WriteLine($"Le type de match est : {Type}");
@@ -91,7 +100,7 @@ namespace ProjetTennis.Models
                 Console.WriteLine(player);
             }
             // Parcourez la liste en prenant deux joueurs à la fois pour les faire jouer l'un contre l'autre
-            if (Type == ScheduleType.GentlemanSingle || Type == ScheduleType.LadiesSingle)
+            if (Type == ScheduleType.GentlemanSingle)
             {
                 for (int i = 0; i < players.Count; i += 2)
                 {
@@ -101,6 +110,26 @@ namespace ProjetTennis.Models
                     opponent2.Player1 = players[i + 1];
                     Match match = new Match(DateTime.Now, 5, this, opponent1, opponent2);
                     Matches.Add(match);
+                    opponentDAO.InsertOpponentSingle(opponent1);
+                    opponentDAO.InsertOpponentSingle(opponent2);
+                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
+                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                }
+            }
+            else if (Type == ScheduleType.LadiesSingle)
+            {
+                for (int i = 0; i < players.Count; i += 2)
+                {
+                    opponent1 = new Opponent(); // Create new opponent for each iteration
+                    opponent2 = new Opponent(); // Create new opponent for each iteration
+                    opponent1.Player1 = players[i];
+                    opponent2.Player1 = players[i + 1];
+                    Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
+                    Matches.Add(match);
+                    opponentDAO.InsertOpponentSingle(opponent1);
+                    opponentDAO.InsertOpponentSingle(opponent2);
+                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
+                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
                 }
             }
             else if (Type == ScheduleType.GentlemanDouble || Type == ScheduleType.LadiesDouble)
@@ -113,8 +142,12 @@ namespace ProjetTennis.Models
                     opponent1.Player2 = players[i + 1];
                     opponent2.Player1 = players[i + 2];
                     opponent2.Player2 = players[i + 3];
-                    Match match = new Match(DateTime.Now, 5, this, opponent1, opponent2);
+                    Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
                     Matches.Add(match);
+                    opponentDAO.InsertOpponentDouble(opponent1);
+                    opponentDAO.InsertOpponentDouble(opponent2);
+                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
+                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
                 }
             }
             else if (Type == ScheduleType.MixedDouble)
@@ -140,8 +173,13 @@ namespace ProjetTennis.Models
                     opponent1.Player2 = playersF[i];
                     opponent2.Player1 = playersM[i + 1];
                     opponent2.Player2 = playersF[i + 1];
-                    Match match = new Match(DateTime.Now, 5, this, opponent1, opponent2);
+                    Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
                     Matches.Add(match);
+                    opponentDAO.InsertOpponentDouble(opponent1);
+                    opponentDAO.InsertOpponentDouble(opponent2);
+                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
+                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+
                 }
             }
         }
@@ -159,91 +197,78 @@ namespace ProjetTennis.Models
 
             return winners;
         }
+        private async Task PlayMatchAsync(Match match)
+        {
+            // Ajoutez une marque de temps avant le match
+            DateTime startTime = DateTime.Now;
+            Trace.WriteLine($"Match {Matches.IndexOf(match)} - Début : {startTime}");
 
-        public void PlayNextRound(Schedule.ScheduleType TypeChoice)
+            // Logique pour jouer un match de manière asynchrone
+            await match.PlayAsync();
+
+            // Ajoutez une marque de temps après le match
+            DateTime endTime = DateTime.Now;
+            Trace.WriteLine($"Match {Matches.IndexOf(match)} - Fin : {endTime}");
+
+            // Comparez les marques de temps pour voir si le match a été joué simultanément
+            TimeSpan duration = endTime - startTime;
+            Trace.WriteLine($"Durée du match {Matches.IndexOf(match)} : {duration.TotalSeconds} secondes");
+        }
+
+        public async Task PlayNextRoundAsync()
         {
             if (Matches == null)
             {
-                CreateMatch(TypeChoice);
+                CreateMatch();
+
+                // Utilisez Task.WhenAll pour exécuter plusieurs matches en parallèle de manière asynchrone
+                var playTasks = Matches.Select(match => PlayMatchAsync(match)).ToList();
+
+                // Attendez que tous les matches soient terminés
+                await Task.WhenAll(playTasks);
+
+                // Affichez le numéro de chaque match joué
                 for (int j = 0; j < Matches.Count; j++)
                 {
-                    Matches[j].Play();
                     Console.WriteLine(j);
                 }
             }
             else
             {
                 List<Opponent> winners = GetWinners();
-                Matches.Clear(); // Effacez les matchs du tour précédent
-                // Parcourez les gagnants pour créer de nouveaux matchs
+                Matches.Clear();
+
+                var matchCreationTasks = new List<Task>();
+
                 for (int i = 0; i < winners.Count; i += 2)
                 {
-                    Opponent opponent1 = new Opponent();
-                    opponent1 = winners[i];
-                    Opponent opponent2 = new Opponent();
-                    opponent2 = (i + 1 < winners.Count) ? winners[i + 1] : null;
+                    Opponent opponent1 = winners[i];
+                    Opponent opponent2 = (i + 1 < winners.Count) ? winners[i + 1] : null;
 
-                    // Créez le nouveau match
                     Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
                     Matches.Add(match);
+
+                    // Créez une tâche pour jouer chaque match de manière asynchrone
+                    matchCreationTasks.Add(PlayMatchAsync(match));
                 }
 
-                // Affichez le nombre de matchs générés pour le tour suivant
+                // Attendez que tous les nouveaux matches soient créés et joués
+                await Task.WhenAll(matchCreationTasks);
+
                 Console.WriteLine($"Nouveau tour généré avec {Matches.Count} matchs.");
+
                 for (int j = 0; j < Matches.Count; j++)
                 {
-                    Matches[j].Play();
                     Console.WriteLine(j);
                 }
-
             }
-
         }
+
 
     }
 
 
 
-
-    //public void PlayNextRound(Schedule.ScheduleType Type)
-    //{
-    //    if (Matches == null)
-    //    {
-    //        CreateMatch(Type);
-    //        for (int j = 0; j < Matches.Count; j++)
-    //        {
-    //            Matches[j].Play();
-    //            Console.WriteLine(j);
-    //        }
-    //    }
-    //    else
-    //    {
-    //        List<Opponent> winners = GetWinners();
-    //        Matches.Clear(); // Effacez les matchs du tour précédent
-    //        // Parcourez les gagnants pour créer de nouveaux matchs
-    //        for (int i = 0; i < winners.Count; i += 2)
-    //        {
-    //            Opponent opponent1 = new Opponent();
-    //            opponent1 = winners[i];
-    //            Opponent opponent2 = new Opponent();
-    //            opponent2 = (i + 1 < winners.Count) ? winners[i + 1] : null;
-
-    //            // Créez le nouveau match
-    //            Match match = new Match(DateTime.Now, 5, this, opponent1, opponent2);
-    //            Matches.Add(match);
-    //        }
-
-    //        // Affichez le nombre de matchs générés pour le tour suivant
-    //        Console.WriteLine($"Nouveau tour généré avec {Matches.Count} matchs.");
-    //        for (int j = 0; j < Matches.Count; j++)
-    //        {
-    //            Matches[j].Play();
-    //            Console.WriteLine(j);
-    //        }
-
-    //    }
-
-    //}
 
 
 

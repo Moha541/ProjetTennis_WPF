@@ -15,7 +15,7 @@ namespace ProjetTennis.DAO
         private string connectionString;
         public SuperTieBreaksDAO()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["TennisProjet"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["Tonda_Mansour_Project"].ConnectionString;
         }
         public List<SuperTieBreak> GetSuperTieBreaks()
         {
@@ -42,19 +42,19 @@ namespace ProjetTennis.DAO
 
             return SuperTieBreaks;
         }
-        /*   public bool InsertSuperTieBreaks(SuperTieBreaks p)
-           {
-               bool succes = false;
+        //public bool InsertSuperTieBreaks(SuperTieBreak s)
+        //{
+        //    bool succes = false;
 
-               using (SqlConnection connection = new SqlConnection(connectionString))
-               {
-                   SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.SuperTieBreakss(Lastname) VALUES(@Lastname)", connection);
-                   cmd.Parameters.AddWithValue("Lastname", p.Lastname);
-                   connection.Open();
-                   int res = cmd.ExecuteNonQuery();
-                   succes = res > 0;
-               }
-               return succes;
-           }*/
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.SuperTieBreakss(Lastname) VALUES(@Lastname)", connection);
+        //        cmd.Parameters.AddWithValue("Lastname", s.);
+        //        connection.Open();
+        //        int res = cmd.ExecuteNonQuery();
+        //        succes = res > 0;
+        //    }
+        //    return succes;
+        //}
     }
 }

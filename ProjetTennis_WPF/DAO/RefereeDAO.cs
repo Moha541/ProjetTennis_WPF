@@ -15,11 +15,11 @@ namespace ProjetTennis.DAO
         private string connectionString;
         public RefereeDAO()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["TennisProjet"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["Tonda_Mansour_Project"].ConnectionString;
         }
-        public List<Referee> GetReferees()
+        public Queue<Referee> GetReferees()
         {
-            List<Referee> Referees = new List<Referee>();
+            Queue<Referee> Referees = new Queue<Referee>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
              
@@ -33,12 +33,12 @@ namespace ProjetTennis.DAO
                     while (reader.Read())
                     {
                         Referee referee = new Referee();
-                        referee.Id_Person = reader.GetInt32("id_person");
+                        referee.Id_Person = reader.GetInt32("Id_person");
                         referee.Firstname = reader.GetString("Firstname");
                         referee.Lastname = reader.GetString("Lastname");
                         referee.Nationality = reader.GetString("Nationality");
                         referee.IsAvailable = reader.GetBoolean("Available");
-                        Referees.Add(referee);
+                        Referees.Enqueue(referee);
                         
                     }
                 }

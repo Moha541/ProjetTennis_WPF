@@ -35,5 +35,6 @@ namespace ProjetTennis.Models
         {
             return $"id : {this.Id_Court}, spec : {this.NbSpectators}, covered : {this.Covered}, available: {this.IsAvailable}";
         }
+
     }
 }

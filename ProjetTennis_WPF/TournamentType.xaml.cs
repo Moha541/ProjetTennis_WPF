@@ -23,19 +23,25 @@ namespace ProjetTennis_WPF
     /// </summary>
     public partial class TournamentType : Window
     {
-        public TournamentType()
+        Schedule schedule = new Schedule();
+        public TournamentType(Tournament tournament)
         {
             InitializeComponent();
+            schedule.Tournament = tournament;
+            Closing += MainWindow_Closing;
         }
 
-       
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+            Application.Current.Shutdown();//Stop le programme quand on appuie sur le X 
+        }
         private void ChoiceType(object sender, RoutedEventArgs e)
         {
             Button clickedButton = (Button)sender;
 
             Enum.TryParse(clickedButton.Content.ToString(), out Schedule.ScheduleType result);//le result va prendre la valeur du contenu du boutton 
             
-            Schedule schedule = new Schedule();
             schedule.Type = result;
             
 
@@ -45,7 +51,7 @@ namespace ProjetTennis_WPF
             if (schedule.Type == ScheduleType.GentlemanSingle || schedule.Type == ScheduleType.LadiesSingle)
             {
                 //ici on envoi bien le bon schedule type
-                PlayTournament playTournament = new PlayTournament(schedule.Type);
+                PlayTournament playTournament = new PlayTournament(schedule);
                 playTournament.Show();
                 this.Hide();
                 
@@ -53,7 +59,7 @@ namespace ProjetTennis_WPF
             else if (schedule.Type == ScheduleType.LadiesDouble || schedule.Type == ScheduleType.GentlemanDouble || schedule.Type == ScheduleType.MixedDouble)
             {
                 //ici on envoi bien le bon schedule type
-                PlayTournamentDouble playTournamentDouble = new PlayTournamentDouble(schedule.Type);
+                PlayTournamentDouble playTournamentDouble = new PlayTournamentDouble(schedule);
                 playTournamentDouble.Show();
                 this.Hide();
             }

@@ -15,7 +15,7 @@ namespace ProjetTennis.DAO
         private string connectionString;
         public TournamentsDAO()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["TennisProjet"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["Tonda_Mansour_Project"].ConnectionString;
         }
         public List<Tournament> GetTournaments()
         {
@@ -58,4 +58,5 @@ namespace ProjetTennis.DAO
                return succes;
            }*/
     }
+    
 }

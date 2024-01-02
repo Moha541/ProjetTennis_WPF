@@ -21,28 +21,31 @@ namespace ProjetTennis_WPF
     /// </summary>
     public partial class PlayTournamentDouble : Window
     {
-        public Schedule.ScheduleType TournamentType { get; set; }
         public ObservableCollection<Match> Matches { get; set; }
 
         private Schedule schedule;
-        public PlayTournamentDouble(Schedule.ScheduleType tournamentType1)
+        public PlayTournamentDouble(Schedule schedule1)
         {
             InitializeComponent();
             //schedule = schedule1;
-            TournamentType = tournamentType1;
+            schedule = schedule1;
 
             InitializeParticipants();
             this.DataContext = this;//définir le contexte de données
+            Closing += MainWindow_Closing;
         }
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
 
+            Application.Current.Shutdown();//Stop le programme quand on appuie sur le X 
+        }
 
         private void InitializeParticipants()
         {
             Matches = new ObservableCollection<Match>();
 
             // Utilisez la variable de classe au lieu d'en déclarer une nouvelle
-            schedule = new Schedule();
-            schedule.Play(TournamentType);
+            schedule.Play(schedule);
             List<Match> matches = schedule.Matches;
 
             for (int i = 0; i < matches.Count(); i++)
@@ -54,12 +57,14 @@ namespace ProjetTennis_WPF
 
         public void PlayNextRound(object sender, RoutedEventArgs e)
         {
-            schedule.Play(TournamentType); // Appeler schedule.Play() au lieu de PlayNextRound()
+            schedule.Play(schedule); // Appeler schedule.Play() au lieu de PlayNextRound()
             UpdateMatchesList();
 
             if (schedule.ActualRound == 6)
             {
                 ShowWinner();
+                IdTxtButton.Visibility = Visibility.Hidden;
+                HomeBtn.Visibility = Visibility.Visible;
             }
         }
 
@@ -86,6 +91,12 @@ namespace ProjetTennis_WPF
             {
                 Matches.Add(match);
             }
+        }
+        private void HomeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Hide();
         }
     }
 }

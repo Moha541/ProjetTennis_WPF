@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="PlayTournamentDouble" Height="450" Width="800"
          WindowState="Maximized">
-    
-    <Grid>
-        <ListView Name="ParticipantsList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+
+    <Grid Background="#FF26B83C">
+        <ListView Name="ParticipantsList" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Foreground="#FF711704">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Match" Width="50" DisplayMemberBinding="{Binding Id_Match}" />
@@ -50,7 +50,10 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Content="Play Next Round" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Click="PlayNextRound" />
+        <Button  x:Name="IdTxtButton" Content="Play Next Round" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Click="PlayNextRound"  Background="#FF8BCC52" />
         <TextBlock x:Name="WinnerTextBlock" HorizontalAlignment="Center" Margin="0,73,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Visibility="Collapsed"/>
+        <Button x:Name="HomeBtn" Content="Home page" HorizontalAlignment="Center" Margin="0,118,0,0" VerticalAlignment="Top" Height="30" Width="92" Visibility="Hidden" Click="HomeBtn_Click" Background="#FF8BCC52"/>
+
     </Grid>
 </Window>
+

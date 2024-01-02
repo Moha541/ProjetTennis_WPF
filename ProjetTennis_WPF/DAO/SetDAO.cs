@@ -15,7 +15,7 @@ namespace ProjetTennis.DAO
         private string connectionString;
         public SetsDAO()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["TennisProjet"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["Tonda_Mansour_Project"].ConnectionString;
         }
         public List<Sets> GetSets()
         {
@@ -44,19 +44,42 @@ namespace ProjetTennis.DAO
 
             return Sets;
         }
-        /*   public bool InsertSets(Sets p)
+          public bool InsertSets(Sets s)
            {
                bool succes = false;
 
                using (SqlConnection connection = new SqlConnection(connectionString))
                {
-                   SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Setss(Lastname) VALUES(@Lastname)", connection);
-                   cmd.Parameters.AddWithValue("Lastname", p.Lastname);
-                   connection.Open();
+                   SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Sets(ScoreOp1,ScoreOp2,winner,Id_Match) VALUES(@ScoreOp1,@ScoreOp2,@Winner,@Id_Match)", connection);
+                   cmd.Parameters.AddWithValue("ScoreOp1", s.ScoreOp1); 
+                   cmd.Parameters.AddWithValue("ScoreOp2", s.ScoreOp2);
+                   cmd.Parameters.AddWithValue("Winner", s.WinnerOpponent.Id_Opponent);
+                   cmd.Parameters.AddWithValue("Id_Match", s.Match.Id_Match);
+
+                connection.Open();
                    int res = cmd.ExecuteNonQuery();
                    succes = res > 0;
                }
                return succes;
-           }*/
+           }
+
+        public int GetIdSet(Sets s)
+        {
+            int id = 0;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand($"SELECT Id_Set FROM Sets WHERE Id_Set = @Id_Set", connection);
+                cmd.Parameters.AddWithValue("Id_Set", s.Id_Set);
+                connection.Open();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        id = reader.GetInt32("Id_Set");
+                    }
+                }
+            }
+            return id;
+        }
     }
 }

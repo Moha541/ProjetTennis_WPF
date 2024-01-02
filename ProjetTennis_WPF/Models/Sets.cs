@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetTennis.DAO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,6 +61,7 @@ namespace ProjetTennis.Models
         }
         public void Play()
         {
+            SetsDAO setsDAO = new SetsDAO();
             TieBreak tieBreak = new TieBreak {Match = Match };
             Random random = new Random();
             int winningPlayer;
@@ -124,7 +126,8 @@ namespace ProjetTennis.Models
             {
                 ScoreOp2++;
             }
-
+            setsDAO.InsertSets(this);
+            this.Id_Set=setsDAO.GetIdSet(this);
         }
     }
 }

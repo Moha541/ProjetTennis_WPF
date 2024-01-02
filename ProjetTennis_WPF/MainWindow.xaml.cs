@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ProjetTennis.DAO;
+using ProjetTennis.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,14 +25,17 @@ namespace ProjetTennis_WPF
         public MainWindow()
         {
             InitializeComponent();
+            Closing += MainWindow_Closing;
+        }
+        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();//Stop le programme quand on appuie sur le X 
         }
         private void Test(object sender, RoutedEventArgs e)
         {
-            // Créez une instance de la deuxième fenêtre
-            TournamentType secondWindow = new TournamentType();
-
-            // Affichez la deuxième fenêtre
-            secondWindow.Show();
+        
+            Tournament tournament = new Tournament();
+            tournament.Play();
             this.Hide();
         }
 

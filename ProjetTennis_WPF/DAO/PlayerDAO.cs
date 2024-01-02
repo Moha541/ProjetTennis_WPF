@@ -15,7 +15,7 @@ namespace ProjetTennis.DAO
         private string connectionString;
         public PlayerDAO()
         {
-            connectionString = ConfigurationManager.ConnectionStrings["TennisProjet"].ConnectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["Tonda_Mansour_Project"].ConnectionString;
         }
 
         public List<Player> GetPlayers()
