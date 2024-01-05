@@ -20,8 +20,8 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Button Content="Lancer le tournoi" HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Width="114" Click="Test" Background="#FFB59C42" Height="27"/>
-        <Label Content="Projet 2023-2024 : Tournoi de tennis" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" FontSize="24" Foreground="#FFB59C42" FontFamily="Yu Gothic UI Light" />
+        <Button Content="Start tournament" HorizontalAlignment="Center"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Width="114" Click="Test" Background="#FFB59C42" Height="27"/>
+        <Label Content="Project 2023-2024 : Tennis Tournament" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" FontSize="24" Foreground="#FFB59C42" FontFamily="Yu Gothic UI Light" />
 
 
         <Grid.Background>

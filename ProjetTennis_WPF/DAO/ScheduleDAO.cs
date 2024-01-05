@@ -30,7 +30,7 @@ namespace ProjetTennis.DAO
                     while (reader.Read())
                     {
                         Schedule Schedule = new Schedule();
-                        Schedule.Tournament = new Tournament(); // Initialize Tournament before setting its property
+                        Schedule.Tournament = new Tournament(); 
                         Schedule.Id_Schedule = reader.GetInt32("Id_Schedule");
                         Schedule.Type = (Schedule.ScheduleType)reader.GetByte("Type");
                         Schedule.ActualRound = reader.GetInt32("ActualRound");

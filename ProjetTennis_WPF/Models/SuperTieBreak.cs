@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjetTennis.DAO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace ProjetTennis.Models
 {
     public class SuperTieBreak : Sets
     {
-        public int Play()
+        public void Play()
         {
-            Console.WriteLine("SUPER TIE BREAK :");
+            SetsDAO setsDAO = new SetsDAO();
             Random random = new Random();
             ScoreOp1 = 0;
             ScoreOp2 = 0;
@@ -30,7 +31,6 @@ namespace ProjetTennis.Models
                 {
                     ScoreOp2++;
                 }
-                ShowScore();
 
             }
            
@@ -38,12 +38,17 @@ namespace ProjetTennis.Models
 
             if (ScoreOp1 > ScoreOp2)
             {
-                return 1;
+                WinnerOpponent = Match.Opponent1;
+                Match.ScoreOp1++;
             }
             else
             {
-                return 2;
+                WinnerOpponent = Match.Opponent2;
+                Match.ScoreOp2++;
             }
+
+            setsDAO.InsertSets(this);
+            this.Id_Set = setsDAO.GetIdSet(this);
 
         }
     }

@@ -42,19 +42,6 @@ namespace ProjetTennis.DAO
 
             return SuperTieBreaks;
         }
-        //public bool InsertSuperTieBreaks(SuperTieBreak s)
-        //{
-        //    bool succes = false;
-
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.SuperTieBreakss(Lastname) VALUES(@Lastname)", connection);
-        //        cmd.Parameters.AddWithValue("Lastname", s.);
-        //        connection.Open();
-        //        int res = cmd.ExecuteNonQuery();
-        //        succes = res > 0;
-        //    }
-        //    return succes;
-        //}
+      
     }
 }

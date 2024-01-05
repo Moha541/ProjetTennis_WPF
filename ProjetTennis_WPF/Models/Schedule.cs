@@ -33,18 +33,10 @@ namespace ProjetTennis.Models
 
             if (ActualRound < 6)  // On ne dépasse pas les 6 rounds 
             {
-
                 PlayNextRoundAsync();
-                Console.WriteLine(Matches.Count);
 
                 winners = GetWinners();
                 ActualRound++;
-
-                if (ActualRound == 6)
-                {
-                    Console.WriteLine("Tournoi terminé. Vainqueur : " + winners[0].Player1.Lastname);
-                }
-
             }
         }
 
@@ -56,8 +48,7 @@ namespace ProjetTennis.Models
             PlayerDAO playerDAO = new PlayerDAO();
             OpponentDAO opponentDAO = new OpponentDAO();
             List<Player> players = null;
-            // Affichage de la valeur de l'énumération
-            Console.WriteLine($"Le type de match est : {Type}");
+           
             // Utilisation de l'énumération dans un switch
             switch (Type)
             {
@@ -81,73 +72,111 @@ namespace ProjetTennis.Models
                     break;
             }
 
-            // Utilisez un objet Random pour générer des indices aléatoires
+            //Random pour générer des indices aléatoires
             Random random = new Random();
 
-            // Mélangez la liste des joueurs de manière aléatoire
+            //Mélange la liste des joueurs de manière aléatoire pour ne pas avoir les mêmes adversaires qui s'affrontent au premier tour
             players = players.OrderBy(x => random.Next()).ToList();
 
-            // Assurez-vous qu'il y a au moins deux joueurs dans la liste
-            if (players.Count < 2)
-            {
-                Console.WriteLine("Il n'y a pas suffisamment de joueurs pour jouer.");
-                return;
-            }
             Opponent opponent1 = new Opponent();
             Opponent opponent2 = new Opponent();
-            foreach (var player in players)
-            {
-                Console.WriteLine(player);
-            }
-            // Parcourez la liste en prenant deux joueurs à la fois pour les faire jouer l'un contre l'autre
+            //On parcoure la liste en prenant deux joueurs à la fois pour les faire jouer l'un contre l'autre
             if (Type == ScheduleType.GentlemanSingle)
             {
+
                 for (int i = 0; i < players.Count; i += 2)
                 {
-                    opponent1 = new Opponent(); // Create new opponent for each iteration
-                    opponent2 = new Opponent(); // Create new opponent for each iteration
+                    opponent1 = new Opponent(); // Creation d'un nouveau opponent à chatte itteration
+                    opponent2 = new Opponent();
                     opponent1.Player1 = players[i];
                     opponent2.Player1 = players[i + 1];
                     Match match = new Match(DateTime.Now, 5, this, opponent1, opponent2);
                     Matches.Add(match);
-                    opponentDAO.InsertOpponentSingle(opponent1);
-                    opponentDAO.InsertOpponentSingle(opponent2);
-                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
-                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                    if (opponentDAO.SearchDuplicateSingle(opponent1))
+                    {
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentSingle(opponent1);
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
+                    }
+
+                    if (opponentDAO.SearchDuplicateSingle(opponent2))
+                    {
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentSingle(opponent2);
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                    }
+
+
+
                 }
             }
             else if (Type == ScheduleType.LadiesSingle)
             {
                 for (int i = 0; i < players.Count; i += 2)
                 {
-                    opponent1 = new Opponent(); // Create new opponent for each iteration
-                    opponent2 = new Opponent(); // Create new opponent for each iteration
+                    opponent1 = new Opponent(); 
+                    opponent2 = new Opponent(); 
                     opponent1.Player1 = players[i];
                     opponent2.Player1 = players[i + 1];
                     Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
                     Matches.Add(match);
-                    opponentDAO.InsertOpponentSingle(opponent1);
-                    opponentDAO.InsertOpponentSingle(opponent2);
-                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
-                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                    if (opponentDAO.SearchDuplicateSingle(opponent1))
+                    {
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentSingle(opponent1);
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent1);
+                    }
+                    if (opponentDAO.SearchDuplicateSingle(opponent2))
+                    {
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentSingle(opponent2);
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentSingle(opponent2);
+                    }
                 }
             }
             else if (Type == ScheduleType.GentlemanDouble || Type == ScheduleType.LadiesDouble)
             {
                 for (int i = 0; i < players.Count; i += 4)
                 {
-                    opponent1 = new Opponent(); // Create new opponent for each iteration
-                    opponent2 = new Opponent(); // Create new opponent for each iteration
+                    opponent1 = new Opponent(); 
+                    opponent2 = new Opponent(); 
                     opponent1.Player1 = players[i];
                     opponent1.Player2 = players[i + 1];
                     opponent2.Player1 = players[i + 2];
                     opponent2.Player2 = players[i + 3];
                     Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
                     Matches.Add(match);
-                    opponentDAO.InsertOpponentDouble(opponent1);
-                    opponentDAO.InsertOpponentDouble(opponent2);
-                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
-                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+                    if (opponentDAO.SearchDuplicateDouble(opponent1))
+                    {
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentDouble(opponent1);
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
+                    }
+                    if (opponentDAO.SearchDuplicateDouble(opponent2))
+                    {
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentDouble(opponent2);
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+                    }
                 }
             }
             else if (Type == ScheduleType.MixedDouble)
@@ -167,18 +196,33 @@ namespace ProjetTennis.Models
                 }
                 for (int i = 0; i < 64; i += 2)
                 {
-                    opponent1 = new Opponent(); // Create new opponent for each iteration
-                    opponent2 = new Opponent(); // Create new opponent for each iteration
+                    opponent1 = new Opponent(); 
+                    opponent2 = new Opponent(); 
                     opponent1.Player1 = playersM[i];
                     opponent1.Player2 = playersF[i];
                     opponent2.Player1 = playersM[i + 1];
                     opponent2.Player2 = playersF[i + 1];
                     Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
                     Matches.Add(match);
-                    opponentDAO.InsertOpponentDouble(opponent1);
-                    opponentDAO.InsertOpponentDouble(opponent2);
-                    opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
-                    opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+                    if (opponentDAO.SearchDuplicateDouble(opponent1))
+                    {
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentDouble(opponent1);
+                        opponent1.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent1);
+                    }
+                    if (opponentDAO.SearchDuplicateDouble(opponent2))
+                    {
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+
+                    }
+                    else
+                    {
+                        opponentDAO.InsertOpponentDouble(opponent2);
+                        opponent2.Id_Opponent = opponentDAO.GetIdOpponentDouble(opponent2);
+                    }
 
                 }
             }
@@ -203,7 +247,7 @@ namespace ProjetTennis.Models
             DateTime startTime = DateTime.Now;
             Trace.WriteLine($"Match {Matches.IndexOf(match)} - Début : {startTime}");
 
-            // Logique pour jouer un match de manière asynchrone
+            //Jouer un match de manière asynchrone
             await match.PlayAsync();
 
             // Ajoutez une marque de temps après le match
@@ -227,11 +271,7 @@ namespace ProjetTennis.Models
                 // Attendez que tous les matches soient terminés
                 await Task.WhenAll(playTasks);
 
-                // Affichez le numéro de chaque match joué
-                for (int j = 0; j < Matches.Count; j++)
-                {
-                    Console.WriteLine(j);
-                }
+               
             }
             else
             {
@@ -242,10 +282,18 @@ namespace ProjetTennis.Models
 
                 for (int i = 0; i < winners.Count; i += 2)
                 {
+                    Match match;
                     Opponent opponent1 = winners[i];
                     Opponent opponent2 = (i + 1 < winners.Count) ? winners[i + 1] : null;
-
-                    Match match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
+                    
+                    if (Type == ScheduleType.GentlemanSingle)
+                    {
+                        match = new Match(DateTime.Now, 5, this, opponent1, opponent2);
+                    }
+                    else
+                    {
+                        match = new Match(DateTime.Now, 3, this, opponent1, opponent2);
+                    }
                     Matches.Add(match);
 
                     // Créez une tâche pour jouer chaque match de manière asynchrone
@@ -255,12 +303,7 @@ namespace ProjetTennis.Models
                 // Attendez que tous les nouveaux matches soient créés et joués
                 await Task.WhenAll(matchCreationTasks);
 
-                Console.WriteLine($"Nouveau tour généré avec {Matches.Count} matchs.");
-
-                for (int j = 0; j < Matches.Count; j++)
-                {
-                    Console.WriteLine(j);
-                }
+                
             }
         }
 

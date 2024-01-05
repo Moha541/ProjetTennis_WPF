@@ -58,14 +58,13 @@ namespace ProjetTennis.DAO
                 connection.Open();
                 using (SqlCommand updateCmd = cmd)
                 {
-                    // Ajouter les paramètres
+                    
                     updateCmd.Parameters.AddWithValue("@Available", referee.IsAvailable);
                     updateCmd.Parameters.AddWithValue("@RefereeId", referee.Id_Person);
 
-                    // Exécuter la commande UPDATE
                     int rowsAffected = updateCmd.ExecuteNonQuery();
 
-                    // Vérifier si la mise à jour a réussi
+                    
                     if (rowsAffected > 0)
                     {
                         Console.WriteLine("Mise à jour réussie.");

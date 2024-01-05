@@ -25,9 +25,6 @@ namespace ProjetTennis.Models
             Id_Person = PersonId;
             Firstname = firstname;
         }
-        public override string ToString()
-        {
-            return $"{this.Firstname} {this.Lastname}, {this.Nationality}";
-        }
+        
     }
 }

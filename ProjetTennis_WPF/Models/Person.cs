@@ -12,8 +12,7 @@ namespace ProjetTennis.Models
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Nationality { get; set; }
-        List<Referee> Referees { get; set; }
-        List<Player> Players { get; set; }
+      
 
        
     }

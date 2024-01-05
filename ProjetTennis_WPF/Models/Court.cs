@@ -13,10 +13,7 @@ namespace ProjetTennis.Models
         public int NbSpectators { get; set; }
         public bool Covered { get; set; }
         public bool IsAvailable { get; set; }
-        public bool Available()
-        {
-            return IsAvailable;
-        }
+        
         public void Release()
         {
             IsAvailable = true;
@@ -31,10 +28,6 @@ namespace ProjetTennis.Models
         public Tournament Tournament { get; set; }
         public List<Match> Matches { get; set; }
 
-        public override string ToString()
-        {
-            return $"id : {this.Id_Court}, spec : {this.NbSpectators}, covered : {this.Covered}, available: {this.IsAvailable}";
-        }
 
     }
 }

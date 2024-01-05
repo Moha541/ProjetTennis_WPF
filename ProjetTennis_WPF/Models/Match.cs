@@ -86,7 +86,6 @@ namespace ProjetTennis.Models
                     // Libérez l'arbitre s'il n'y a pas de court disponible
                     Referee.Release();
                     Schedule.Tournament.availableReferees.Enqueue(Referee);
-                    Console.WriteLine("Aucun court disponible");
                 }
             }
 
@@ -98,7 +97,6 @@ namespace ProjetTennis.Models
             {
                 matchDAO.InsertMatch(this);
                 Id_Match = matchDAO.GetIdMatch(this);
-                Trace.WriteLine($"Match : {Id_Match}");
                 Sets set = new Sets { Match = this };
                 DateMatch = DateTime.Now;
 
@@ -119,14 +117,7 @@ namespace ProjetTennis.Models
                         if (ScoreOp1 == 1 && ScoreOp2 == 1)
                         {
                             SuperTieBreak superTieBreak = new SuperTieBreak { Match = this };
-                            if (superTieBreak.Play() == 1)
-                            {
-                                ScoreOp1++;
-                            }
-                            else
-                            {
-                                ScoreOp2++;
-                            }
+                            superTieBreak.Play();
                         }
                     } while (ScoreOp1 < 2 && ScoreOp2 < 2);
                 }
@@ -147,14 +138,7 @@ namespace ProjetTennis.Models
                         if (ScoreOp1 == 2 && ScoreOp2 == 2)
                         {
                             SuperTieBreak superTieBreak = new SuperTieBreak { Match = this };
-                            if (superTieBreak.Play() == 1)
-                            {
-                                ScoreOp1++;
-                            }
-                            else
-                            {
-                                ScoreOp2++;
-                            }
+                            superTieBreak.Play();
 
                         }
                     } while (ScoreOp1 < 3 && ScoreOp2 < 3);
@@ -171,10 +155,7 @@ namespace ProjetTennis.Models
                 Schedule.Tournament.availableCourts.Enqueue(Court);
                 await Task.Delay(1000);
             }
-            else
-            {
-                Trace.WriteLine("aucun arbitre disponible");
-            }
+           
             
         }
 

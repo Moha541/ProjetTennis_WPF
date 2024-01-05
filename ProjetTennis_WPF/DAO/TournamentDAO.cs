@@ -43,20 +43,7 @@ namespace ProjetTennis.DAO
 
             return Tournaments;
         }
-        /*   public bool InsertTournaments(Tournaments p)
-           {
-               bool succes = false;
-
-               using (SqlConnection connection = new SqlConnection(connectionString))
-               {
-                   SqlCommand cmd = new SqlCommand($"INSERT INTO dbo.Tournamentss(Lastname) VALUES(@Lastname)", connection);
-                   cmd.Parameters.AddWithValue("Lastname", p.Lastname);
-                   connection.Open();
-                   int res = cmd.ExecuteNonQuery();
-                   succes = res > 0;
-               }
-               return succes;
-           }*/
+      
     }
     
 }

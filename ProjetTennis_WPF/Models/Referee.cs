@@ -10,22 +10,16 @@ namespace ProjetTennis.Models
 {
     public class Referee : Person
     {
-        //public List<Match> Matches { get; set; }
+    
         public bool IsAvailable { get; set; }
-        public bool Available()
-        {
-            return IsAvailable;
-        }
+       
         public static Queue<Referee> GetReferees()
         {
             RefereeDAO refereeDAO = new RefereeDAO();
             return refereeDAO.GetReferees();
         }
 
-        public override string ToString()
-        {
-            return $"{this.Firstname} {this.Lastname}, {this.Nationality}";
-        }
+     
         public void Release()
         {
             IsAvailable = true;

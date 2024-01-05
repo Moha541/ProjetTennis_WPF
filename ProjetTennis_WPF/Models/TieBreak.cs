@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ProjetTennis.Models
 {
-    public class TieBreak:Sets
+    public class TieBreak
     {
         public int Play()
         {
-            Console.WriteLine("TIE BREAK :");
+            
             Random random = new Random();
-            ScoreOp1 = 0;
-            ScoreOp2 = 0;
+            int ScoreTieBreak1 = 0;
+            int ScoreTieBreak2 = 0;
             int winningPlayer;
 
 
@@ -24,18 +24,17 @@ namespace ProjetTennis.Models
 
                 if (winningPlayer == 0)
                 {
-                    ScoreOp1++;
+                    ScoreTieBreak1++;
                 }
                 else
                 {
-                    ScoreOp2++;
+                    ScoreTieBreak2++;
                 }
-                ShowScore();
-
+                
             }
-            while (!((ScoreOp1 >= 7 && Math.Abs(ScoreOp1 - ScoreOp2) >= 2) || (ScoreOp2 >= 7 && Math.Abs(ScoreOp1 - ScoreOp2) >= 2)));
-            Console.WriteLine("END OF TIE BREAK");
-            if (ScoreOp1 > ScoreOp2)
+            while (!((ScoreTieBreak1 >= 7 && Math.Abs(ScoreTieBreak1 - ScoreTieBreak2) >= 2) || (ScoreTieBreak2 >= 7 && Math.Abs(ScoreTieBreak1 - ScoreTieBreak2) >= 2)));
+           
+            if (ScoreTieBreak1 > ScoreTieBreak2)
             {
                 return 1;
             }

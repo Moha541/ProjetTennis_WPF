@@ -30,7 +30,7 @@ namespace ProjetTennis.DAO
                     while (reader.Read())
                     {
                         Court Court = new Court();
-                        Court.Tournament = new Tournament(); // Initialize Tournament before setting its property
+                        Court.Tournament = new Tournament(); 
                         Court.Id_Court = reader.GetInt32("Id_Court");
                         Court.NbSpectators = reader.GetInt32("nbSpectators");
                         Court.Covered = reader.GetBoolean("covered");
@@ -55,16 +55,16 @@ namespace ProjetTennis.DAO
                 connection.Open();
                 using (SqlCommand updateCmd = cmd)
                 {
-                    // Ajouter les paramètres
+                    //On ajoute les paramètres
                     updateCmd.Parameters.AddWithValue("@covered", court.Covered);
                     updateCmd.Parameters.AddWithValue("@nbSpectators", court.NbSpectators);
                     updateCmd.Parameters.AddWithValue("@Available", court.IsAvailable);
                     updateCmd.Parameters.AddWithValue("@CourtId", court.Id_Court);
 
-                    // Exécuter la commande UPDATE
+                    //On exécute la commande UPDATE
                     int rowsAffected = updateCmd.ExecuteNonQuery();
 
-                    // Vérifier si la mise à jour a réussi
+                    //On vérifie si la mise à jour a réussi
                     if (rowsAffected > 0)
                     {
                         Console.WriteLine("Mise à jour réussie.");
